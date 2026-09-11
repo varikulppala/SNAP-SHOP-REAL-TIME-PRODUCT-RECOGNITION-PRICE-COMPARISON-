@@ -1,0 +1,39 @@
+# YOLOv8 dataset config for Snap&Shop 30 products
+# Point path to this dataset folder when training: yolo detect train data=dataset/data.yaml ...
+path: .
+train: train/images
+val: val/images
+
+# Class indices must match classes.txt (line number = index)
+names:
+  0: Red Bull 250ml
+  1: Coca-Cola 500ml
+  2: "Lay's Classic Salted 100g"
+  3: Pepsi 500ml
+  4: Sprite 600ml
+  5: Fanta Orange 600ml
+  6: Maggi Masala Noodles 70g
+  7: Maggi Masala Noodles 4-Pack
+  8: Yippee Magic Masala Noodles 70g
+  9: Parle-G Biscuits 800g
+  10: Britannia Marie Gold 200g
+  11: Oreo Original Biscuits 120g
+  12: Amul Taaza Milk 1L
+  13: Amul Butter 100g
+  14: Amul Cheese Slices 200g
+  15: Fortune Sunlite Refined Sunflower Oil 1L
+  16: Saffola Gold Rice Bran Oil 1L
+  17: Fortune Basmati Rice 1kg
+  18: Tata Salt 1kg
+  19: Aashirvaad Atta 5kg
+  20: Tata Tea Gold 500g
+  21: Nescafe Classic Coffee 100g
+  22: Bru Instant Coffee 100g
+  23: Dove Soap 100g
+  24: Lux Soap 100g
+  25: Dettol Handwash Refill 750ml
+  26: Colgate Strong Teeth Toothpaste 200g
+  27: Closeup Everfresh Toothpaste 150g
+  28: Surf Excel Easy Wash 1kg
+  29: Rin Detergent Powder 1kg
+  30: Vim Dishwash Liquid 500ml

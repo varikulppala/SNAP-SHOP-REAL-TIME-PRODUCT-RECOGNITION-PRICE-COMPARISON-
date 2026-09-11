@@ -1,0 +1,111 @@
+{
+  "products": [
+    {
+      "name": "Red Bull 250ml",
+      "brand": "Red Bull",
+      "image": "",
+      "category": "Energy Drinks"
+    },
+    {
+      "name": "Coca-Cola 500ml",
+      "brand": "Coca-Cola",
+      "image": "",
+      "category": "Beverages"
+    },
+    {
+      "name": "Lay's Classic Salted 100g",
+      "brand": "Lay's",
+      "image": "",
+      "category": "Snacks"
+    }
+  ],
+  "prices": [
+    {
+      "productName": "Red Bull 250ml",
+      "platform": "Amazon",
+      "price": 110,
+      "rating": 4.5,
+      "link": "https://www.amazon.in/s?k=Red+Bull+250ml"
+    },
+    {
+      "productName": "Red Bull 250ml",
+      "platform": "Flipkart",
+      "price": 105,
+      "rating": 4.3,
+      "link": "https://www.flipkart.com/search?q=Red+Bull+250ml"
+    },
+    {
+      "productName": "Red Bull 250ml",
+      "platform": "JioMart",
+      "price": 102,
+      "rating": 4.2,
+      "link": "https://www.jiomart.com/catalogsearch/result?q=Red+Bull+250ml"
+    },
+    {
+      "productName": "Coca-Cola 500ml",
+      "platform": "Amazon",
+      "price": 40,
+      "rating": 4.4,
+      "link": "https://www.amazon.in/s?k=Coca-Cola+500ml"
+    },
+    {
+      "productName": "Coca-Cola 500ml",
+      "platform": "Flipkart",
+      "price": 38,
+      "rating": 4.2,
+      "link": "https://www.flipkart.com/search?q=Coca-Cola+500ml"
+    },
+    {
+      "productName": "Coca-Cola 500ml",
+      "platform": "JioMart",
+      "price": 36,
+      "rating": 4.1,
+      "link": "https://www.jiomart.com/catalogsearch/result?q=Coca-Cola+500ml"
+    },
+    {
+      "productName": "Lay's Classic Salted 100g",
+      "platform": "Amazon",
+      "price": 30,
+      "rating": 4.3,
+      "link": "https://www.amazon.in/s?k=Lay%27s+Classic+Salted+100g"
+    },
+    {
+      "productName": "Lay's Classic Salted 100g",
+      "platform": "Flipkart",
+      "price": 29,
+      "rating": 4.2,
+      "link": "https://www.flipkart.com/search?q=Lay%27s+Classic+Salted+100g"
+    },
+    {
+      "productName": "Lay's Classic Salted 100g",
+      "platform": "JioMart",
+      "price": 28,
+      "rating": 4.1,
+      "link": "https://www.jiomart.com/catalogsearch/result?q=Lay%27s+Classic+Salted+100g"
+    }
+  ],
+  "stores": [
+    {
+      "name": "Reliance Smart",
+      "location": { "lat": 13.0827, "lng": 80.2707 },
+      "distance": 1.2,
+      "availability": "In stock",
+      "productName": "Red Bull 250ml"
+    },
+    {
+      "name": "Local Supermarket",
+      "location": { "lat": 13.085, "lng": 80.273 },
+      "distance": 2.0,
+      "availability": "Limited",
+      "productName": "Coca-Cola 500ml"
+    },
+    {
+      "name": "City Hypermarket",
+      "location": { "lat": 13.09, "lng": 80.27 },
+      "distance": 3.5,
+      "availability": "In stock",
+      "productName": "Lay's Classic Salted 100g"
+    }
+  ]
+}
+
