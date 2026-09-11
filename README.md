@@ -1,151 +1,117 @@
-\# Snap\&Shop
+# Snap&Shop
 
+## Real-Time Product Recognition & Price Comparison
 
+Snap&Shop is a product recognition and price comparison application that helps users identify products from images, search for matching products, compare available prices, and discover nearby stores.
 
-\## Real-Time Product Recognition \& Price Comparison
+The application supports both local product data and online shopping services.
 
+---
 
+## Key Features
 
-Snap\&Shop is an intelligent product recognition and price comparison system that helps users identify products from images and compare their prices across both offline stores and online stores.
+- Image-based product recognition
+- AI-assisted product identification
+- Product name and brand detection
+- Product information extraction
+- Product search
+- Local product price lookup
+- Online Google Shopping search
+- Price comparison across multiple retailers
+- Nearby store discovery
+- Google Maps/Places integration
+- User registration and JWT authentication
+- Search history for authenticated users
+- Web-based product comparison interface
 
+---
 
+## Technology Stack
 
-Instead of manually searching for a product across multiple platforms, Snap\&Shop combines computer vision, OCR, semantic matching, and product search to simplify product discovery and price comparison.
+### Frontend
 
+- Next.js
+- React
+- JavaScript
+- CSS
 
+### Backend
 
-\---
+- Node.js
+- Express.js
+- MongoDB
+- Mongoose
+- JWT authentication
 
+### Product Detection
 
+- Google Cloud Vision API
+- Web Detection
+- Label Detection
+- Logo Detection
 
-\## Key Features
+### Standalone AI Module
 
+The repository also contains a separate Python AI module using:
 
+- YOLOv8
+- Tesseract OCR
+- OpenCV
+- Python
+- Ultralytics
 
-\- Image-based product recognition
+### Online Services
 
-\- AI-based product identification
+- SerpAPI
+- Google Shopping
+- Google Maps/Places
 
-\- Product information extraction
+---
 
-\- Dynamic product search
-
-\- Online store support
-
-\- Offline/local store support
-
-\- Semantic product matching
-
-\- Real-time price comparison
-
-\- Unified product comparison interface
-
-
-
-\---
-
-
-
-\## System Architecture
-
-
+## System Architecture
 
 ```text
-
-&#x20;                   +----------------------+
-
-&#x20;                   |      User Input      |
-
-&#x20;                   |    Product Image     |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                              v
-
-&#x20;                   +----------------------+
-
-&#x20;                   | Image Processing \&    |
-
-&#x20;                   | Product Detection     |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                              v
-
-&#x20;                   +----------------------+
-
-&#x20;                   | AI Product Analysis   |
-
-&#x20;                   | Visual Features + OCR |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                              v
-
-&#x20;                   +----------------------+
-
-&#x20;                   | Dynamic Query /       |
-
-&#x20;                   | Keyword Generation    |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                   |                      |
-
-&#x20;                   v                      v
-
-&#x20;         +------------------+   +------------------+
-
-&#x20;         |  Online Stores   |   |  Offline Stores  |
-
-&#x20;         |  Product Search  |   |  Product Search  |
-
-&#x20;         +--------+---------+   +--------+---------+
-
-&#x20;                  |                      |
-
-&#x20;                  +----------+-----------+
-
-&#x20;                             |
-
-&#x20;                             v
-
-&#x20;                   +----------------------+
-
-&#x20;                   | Semantic Matching \&   |
-
-&#x20;                   | Result Ranking        |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                              v
-
-&#x20;                   +----------------------+
-
-&#x20;                   | Price Comparison \&    |
-
-&#x20;                   | Product Results       |
-
-&#x20;                   +----------+-----------+
-
-&#x20;                              |
-
-&#x20;                              v
-
-&#x20;                   +----------------------+
-
-&#x20;                   |    User Interface     |
-
-&#x20;                   +----------------------+
++----------------------+
+|        User          |
++----------+-----------+
+           |
+           v
++----------------------+
+|      Next.js         |
+|      Frontend        |
++----------+-----------+
+           |
+           | REST API
+           v
++----------------------+
+|    Node.js/Express   |
+|       Backend        |
++----------+-----------+
+           |
+     +-----+------+
+     |            |
+     v            v
++---------+   +------------------+
+| Product |   | Store / Shopping |
+|Detection|   |    Services      |
++----+----+   +--------+---------+
+     |                 |
+     v                 v
++---------+     +----------------+
+| Google  |     | Local Product  |
+| Vision  |     | Data / SerpAPI |
++---------+     +----------------+
+     |                 |
+     +-------+---------+
+             |
+             v
++----------------------+
+| Price Comparison     |
+| & Product Results    |
++----------+-----------+
+           |
+           v
++----------------------+
+|      Frontend        |
+|   Results Interface  |
++----------------------+
