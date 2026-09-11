@@ -2,8 +2,20 @@ const path = require('path');
 
 const products = require(path.join(__dirname, '../../data/products.json'));
 
+const normalizeProductName = (value) => {
+  if (!value || typeof value !== 'string') return '';
+
+  return value
+    .toLowerCase()
+    .replace(/['’]/g, '')
+    .replace(/[^\w\s]/g, ' ')
+    .replace(/\s+/g, ' ')
+    .trim();
+};
+
 const buildSearchLink = (platform, productName) => {
   const q = encodeURIComponent(productName);
+
   switch (platform) {
     case 'Amazon':
       return `https://www.amazon.in/s?k=${q}`;
@@ -34,15 +46,17 @@ const baseRatings = {
 const comparePrices = (productName) => {
   if (!productName) return [];
 
-  const query = productName.toLowerCase();
+  const query = normalizeProductName(productName);
 
   const match =
-    products.find((p) => p.product.toLowerCase() === query) ||
     products.find(
-      (p) =>
-        p.product.toLowerCase().includes(query) ||
-        query.includes(p.product.toLowerCase())
-    );
+      (p) => normalizeProductName(p.product) === query
+    ) ||
+    products.find((p) => {
+      const product = normalizeProductName(p.product);
+
+      return product.includes(query) || query.includes(product);
+    });
 
   if (!match) {
     return [];
@@ -59,8 +73,12 @@ const comparePrices = (productName) => {
 
   const results = entries.map((e, index) => {
     const base = baseRatings[e.platform] || 4.0;
-    // Small deterministic variation per row so ratings look natural
-    const rating = Math.max(3.5, Math.min(5, base + (index - 1) * 0.1));
+
+    // Small deterministic variation per row so ratings look natural.
+    const rating = Math.max(
+      3.5,
+      Math.min(5, base + (index - 1) * 0.1)
+    );
 
     return {
       platform: e.platform,
@@ -71,16 +89,30 @@ const comparePrices = (productName) => {
   });
 
   results.sort((a, b) => a.price - b.price);
+
   return results;
 };
 
 /** When no dataset or API prices exist: search links per platform so the UI is still useful. */
 function fallbackPlatformSearchRows(productName) {
   if (!productName || !String(productName).trim()) return [];
+
   const name = String(productName).trim();
-  return ['Amazon', 'Flipkart', 'JioMart', 'BigBasket', 'Blinkit', 'DMart'].map((platform, index) => {
+
+  return [
+    'Amazon',
+    'Flipkart',
+    'JioMart',
+    'BigBasket',
+    'Blinkit',
+    'DMart'
+  ].map((platform, index) => {
     const base = baseRatings[platform] || 4.0;
-    const rating = Math.max(3.5, Math.min(5, base + (index - 1) * 0.1));
+    const rating = Math.max(
+      3.5,
+      Math.min(5, base + (index - 1) * 0.1)
+    );
+
     return {
       platform,
       price: null,
@@ -92,73 +124,120 @@ function fallbackPlatformSearchRows(productName) {
 
 /** Major Indian retailers — shown first; match seller name or Shopping link host. */
 const CANONICAL_PLATFORMS = [
-  { platform: 'Amazon', patterns: [/amazon/i], hosts: ['amazon.in', 'amazon.com', 'amzn.'] },
-  { platform: 'Flipkart', patterns: [/flipkart/i], hosts: ['flipkart.com', 'fkrt.it'] },
-  { platform: 'JioMart', patterns: [/jiomart|jio\s*mart/i], hosts: ['jiomart.com'] },
-  { platform: 'BigBasket', patterns: [/big\s*basket|bigbasket/i], hosts: ['bigbasket.com'] },
-  { platform: 'Blinkit', patterns: [/blinkit|grofers/i], hosts: ['blinkit.com', 'grofers.com'] },
-  { platform: 'DMart', patterns: [/d[\s-]?mart|dmart/i], hosts: ['dmart.in'] }
+  {
+    platform: 'Amazon',
+    patterns: [/amazon/i],
+    hosts: ['amazon.in', 'amazon.com', 'amzn.']
+  },
+  {
+    platform: 'Flipkart',
+    patterns: [/flipkart/i],
+    hosts: ['flipkart.com', 'fkrt.it']
+  },
+  {
+    platform: 'JioMart',
+    patterns: [/jiomart|jio\s*mart/i],
+    hosts: ['jiomart.com']
+  },
+  {
+    platform: 'BigBasket',
+    patterns: [/big\s*basket|bigbasket/i],
+    hosts: ['bigbasket.com']
+  },
+  {
+    platform: 'Blinkit',
+    patterns: [/blinkit|grofers/i],
+    hosts: ['blinkit.com', 'grofers.com']
+  },
+  {
+    platform: 'DMart',
+    patterns: [/d[\s-]?mart|dmart/i],
+    hosts: ['dmart.in']
+  }
 ];
 
 /** Google Shopping links are often redirects; decode adurl/url so we still detect retailer. */
 function linkHaystackForRetailerMatch(link) {
   if (!link || typeof link !== 'string') return '';
+
   let hay = link.toLowerCase();
+
   try {
     const u = new URL(link);
+
     for (const param of ['adurl', 'url', 'u', 'q']) {
       const v = u.searchParams.get(param);
       if (!v) continue;
+
       try {
         const dec = decodeURIComponent(v.replace(/\+/g, ' '));
+
         if (/^https?:\/\//i.test(dec)) {
           hay += ` ${dec.toLowerCase()}`;
         }
       } catch (e) {
-        // ignore
+        // Ignore malformed encoded URLs.
       }
     }
   } catch (e) {
-    // ignore
+    // Ignore invalid URLs.
   }
+
   return hay;
 }
 
 function rowBelongsToCanonical(row, { patterns, hosts }) {
-  const src = String(row.source || row.seller || row.store || '').trim();
-  if (src && patterns.some((p) => p.test(src))) return true;
-  const haystack = linkHaystackForRetailerMatch(String(row.link || ''));
+  const src = String(
+    row.source || row.seller || row.store || ''
+  ).trim();
+
+  if (src && patterns.some((p) => p.test(src))) {
+    return true;
+  }
+
+  const haystack = linkHaystackForRetailerMatch(
+    String(row.link || '')
+  );
+
   return hosts.some((h) => haystack.includes(h));
 }
 
 /**
  * @param {string} productName
- * @param {Array<{ source?: string, price?: number, rating?: number, link?: string }>} serpRows - Google Shopping rows
+ * @param {Array<{ source?: string, price?: number, rating?: number, link?: string }>} serpRows
  * @returns {Array<{ platform: string, price: number|null, rating: number|null, link: string }>}
  */
 function mergeShoppingIntoCanonicalRows(productName, serpRows) {
   const name = String(productName || '').trim();
+
   if (!name) return [];
 
   const out = [];
 
   for (const def of CANONICAL_PLATFORMS) {
     const { platform } = def;
-    const candidates = (serpRows || []).filter((r) => rowBelongsToCanonical(r, def));
+
+    const candidates = (serpRows || []).filter(
+      (r) => rowBelongsToCanonical(r, def)
+    );
 
     let best = null;
     let bestPrice = Infinity;
+
     for (const r of candidates) {
       const p = Number(r.price);
+
       if (p > 0 && p < bestPrice) {
         bestPrice = p;
         best = r;
       }
     }
+
     if (!best && candidates.length > 0) {
       best = candidates.reduce((a, b) => {
         const pa = Number(a.price) || Infinity;
         const pb = Number(b.price) || Infinity;
+
         return pa <= pb ? a : b;
       });
     }
@@ -174,6 +253,7 @@ function mergeShoppingIntoCanonicalRows(productName, serpRows) {
       });
     } else {
       const link = buildSearchLink(platform, name);
+
       if (link) {
         out.push({
           platform,
@@ -194,4 +274,3 @@ module.exports = {
   fallbackPlatformSearchRows,
   mergeShoppingIntoCanonicalRows
 };
-
